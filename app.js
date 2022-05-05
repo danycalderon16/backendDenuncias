@@ -5,6 +5,8 @@ const port = 5000
 const mysql = require('mysql')
 require('dotenv').config()
 
+app.use(express.json());
+
 const {insertMunicipios,readMunicipios} = require("./operations");
 
 
@@ -20,7 +22,38 @@ app.set('view engine', 'ejs');
 app.get('', (req, res) => {
     res.render('index', { text: 'Equipo 5' })
 })
-app.get('/insertMunicipios', (req, res) => {
+
+app.get('/users/:id',(req, res)=>{
+    const {id} = req.params
+    let sql ='select * from usuarios where id_equipo = ?'
+    conexion.query(sql,[id],(err, rows, fields)=>{
+        if(err) throw err;
+        else{
+            res.json(rows)
+        }
+    })
+})
+
+
+app.post('/insertuser',( req, res)=>{
+    const{nombres, ap_pa,ap_ma,username,password} = req.body
+     let sql = `insert into \`registrosincidencias\`.\`usuarios\`(
+         \`USUARIO_NOMBRES\`,
+         \`USUARIO_APE_PATERNO\`, 
+         \`USUARIO_APE_MAETRNO\`,  
+         \`USUARIO_USERNAME\`,
+         \`USUARIO_PASSWORD\`) 
+     values('${nombres}','${ap_pa}','${ap_ma}','${username}','${password}')`
+    connection.query(sql, (err, rows, fields)=>{
+        if(err) throw err
+        else{
+            res.json({status: 'usuario agregado'})
+        }
+    })
+})
+
+
+app.post('/insertMunicipios', (req, res) => {
     insertMunicipios(connection, 
         {municipio_nombre: 'San Blas'},
         result => {
@@ -33,6 +66,8 @@ app.get('/readMunicipios', (req, res) => {
         res.json(result);
     })
 })
+
+
 
 app.get('/map', (req, res) => {
     res.render('map', {})
