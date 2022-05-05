@@ -23,10 +23,21 @@ app.get('', (req, res) => {
     res.render('index', { text: 'Equipo 5' })
 })
 
+app.get('/users',(req, res)=>{
+    const {id} = req.params
+    let sql ='select * from usuarios'
+    connection.query(sql,[id],(err, rows, fields)=>{
+        if(err) throw err;
+        else{
+            res.json(rows)
+        }
+    })
+})
+
 app.get('/users/:id',(req, res)=>{
     const {id} = req.params
-    let sql ='select * from usuarios where id_equipo = ?'
-    conexion.query(sql,[id],(err, rows, fields)=>{
+    let sql ='select * from usuarios where USUARIO_USERNAME = ?'
+    connection.query(sql,[id],(err, rows, fields)=>{
         if(err) throw err;
         else{
             res.json(rows)
