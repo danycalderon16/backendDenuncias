@@ -7,7 +7,7 @@ require('dotenv').config()
 
 app.use(express.json());
 
-const {insertMunicipios,readMunicipios} = require("./operations");
+const {insertMunicipios,readMunicipios,insertarUsuario,readUsers} = require("./operations");
 
 
 // Static Files
@@ -23,61 +23,50 @@ app.get('', (req, res) => {
     res.render('index', { text: 'Equipo 5' })
 })
 
+/* obetenmos todos los usuarios */
 app.get('/users',(req, res)=>{
-    const {id} = req.params
-    let sql ='select * from usuarios'
-    connection.query(sql,[id],(err, rows, fields)=>{
-        if(err) throw err;
-        else{
-            res.json(rows)
-        }
-    })
-})
-
-app.get('/users/:id',(req, res)=>{
-    const {id} = req.params
-    let sql ='select * from usuarios where USUARIO_USERNAME = ?'
-    connection.query(sql,[id],(err, rows, fields)=>{
-        if(err) throw err;
-        else{
-            res.json(rows)
-        }
-    })
-})
-
-
-app.post('/insertuser',( req, res)=>{
-    const{nombres, ap_pa,ap_ma,username,password} = req.body
-     let sql = `insert into \`registrosincidencias\`.\`usuarios\`(
-         \`USUARIO_NOMBRES\`,
-         \`USUARIO_APE_PATERNO\`, 
-         \`USUARIO_APE_MAETRNO\`,  
-         \`USUARIO_USERNAME\`,
-         \`USUARIO_PASSWORD\`) 
-     values('${nombres}','${ap_pa}','${ap_ma}','${username}','${password}')`
-    connection.query(sql, (err, rows, fields)=>{
-        if(err) throw err
-        else{
-            res.json({status: 'usuario agregado'})
-        }
-    })
-})
-
-
-app.post('/insertMunicipios', (req, res) => {
-    insertMunicipios(connection, 
-        {municipio_nombre: 'San Blas'},
+    readUsers(connection, 
         result => {
         res.json(result);
     })
 })
+
+/** Obtenemos un usuario por el user name */
+app.get('/user/:id',(req, res)=>{
+    const {id} = req.params
+    readUsers(connection, 
+        {id},
+        result => res.json(result))
+})
+
+
+/** Insertamos un usuario */
+app.post('/insertuser', (req, res) => {
+    const {nombres,apellido_paterno,apellido_materno,username,password} = req.body
+    insertarUsuario(connection, 
+        {nombres,apellido_paterno,apellido_materno,username,password},
+        result => {
+            res.json(result);
+    })
+})
+
+/** Inserta municipio */
+app.post('/insertMunicipios', (req, res) => {
+    const {municipio} = req.body
+    insertMunicipios(connection, 
+        {municipio_nombre: municipio},
+        result => {
+            res.json(result);
+    })
+})
+
+/** Leer municipios */
 app.get('/readMunicipios', (req, res) => {
     readMunicipios(connection, 
         result => {
         res.json(result);
     })
 })
-
 
 
 app.get('/map', (req, res) => {
