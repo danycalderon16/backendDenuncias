@@ -10,7 +10,7 @@ function readUsers(connection, callback) {
     });
 }
 
-function readUsers(connection, data ,callback) {
+function readUser(connection, data ,callback) {
     let selectQuery = "SELECT * FROM usuarios where USUARIO_USERNAME = ?"
     let query = mysql.format(selectQuery, [data.id])
     connection.query(query, function (err, result) {
@@ -70,5 +70,6 @@ module.exports = {
     insertMunicipios,
     readMunicipios,
     insertarUsuario,
-    readUsers
+    readUsers,
+    readUser
 }
