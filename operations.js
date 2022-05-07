@@ -9,13 +9,21 @@ function readUsers(connection, callback) {
         callback(result);  
     });
 }
-
+/*
 function readUser(connection, data ,callback) {
-    let selectQuery = "SELECT * FROM usuarios where USUARIO_USERNAME = ?"
+    let selectQuery = "SELECT * FROM usuarios where USUARIO_USERNAME = ? and USUARIO_PASSWORD = ?"
+    let query = mysql.format(selectQuery, [data.id,data.pass])
+    connection.query(query, function (err, result) {
+        if(err) throw err;
+        callback(err,result);  
+    });
+}*/
+function readUser(connection, data ,callback) {
+    let selectQuery = "SELECT * FROM usuarios where USUARIO_USERNAME = ? "
     let query = mysql.format(selectQuery, [data.id])
     connection.query(query, function (err, result) {
         if(err) throw err;
-        callback(result);  
+        callback(err,result);  
     });
 }
 

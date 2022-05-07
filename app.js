@@ -4,12 +4,17 @@ const app = express()
 const port = 5000
 const mysql = require('mysql')
 const bcrypt = require('bcryptjs');
+const bodyParser = require('body-parser')
+const {insertMunicipios,readMunicipios,insertarUsuario,readUsers,readUser} = require("./operations");
+const swal = require ('sweetalert2');
 require('dotenv').config()
 
 app.use(express.json());
 
-const {insertMunicipios,readMunicipios,insertarUsuario,readUsers,readUser} = require("./operations");
+// create application/json parser
+const jsonParser = bodyParser.json()
 
+const urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -50,23 +55,84 @@ app.get('/user/:id',(req, res)=>{
         result => res.json(result))
 })
 
+// autenticación
+app.post('/auth', urlencodedParser,(req, res)=> {
+	const user = req.body.user;
+	const pass = req.body.pass;    
+	if (user && pass) {
+		readUser(connection, 
+            {id:user,pass},
+             (err,result) => {
+                if(err)console.log(err);          
+                if(pass == result[0].USUARIO_PASSWORD)       
+                    res.send(result)               
+                else
+                    res.send("Contraseña incorrecta")
+            }
+        )
+	} else {
+		res.send('Please enter user and Password!');
+		res.end();
+	}
+});
 
+/*
+app.post('/auth', urlencodedParser, async (req, res)=> {
+	const user = req.body.user;
+	const pass = req.body.pass;    
+    
+    let passwordHash = await bcrypt.hash(pass, 8);
+	if (user && pass) {
+		readUser(connection, 
+            {id:user},
+            async (err,result) => {
+                if(err){console.log(err);}               
+                if( await bcrypt.compare(passwordHash, result[0].USUARIO_PASSWORD))  {    
+                    res.render('login', {
+                        alert: true,
+                        alertTitle: "Conexión exitosa",
+                        alertMessage: "¡LOGIN CORRECTO!",
+                        alertIcon:'success',
+                        showConfirmButton: false,
+                        timer: 1500,
+                        ruta: ''
+                    });       
+                }
+            }
+        )
+	} else {
+		res.send('Please enter user and Password!');
+		res.end();
+	}
+});
+*/
 /** Insertamos un usuario */
-app.post('/insertuser', (req, res) => {
+app.post('/insertuser',  urlencodedParser, (req, res) => {
     const nombres = req.body.names;
 	const apellido_paterno = req.body.ape_pat;
     const apellido_materno = req.body.ape_mat;
     const username = req.body.username;
 	const pass = req.body.pass;
-	//let passwordHash = await bcrypt.hash(pass, 8);
-    console.log(nombres,apellido_paterno,apellido_materno,username,pass);
-//    const {nombres,apellido_paterno,apellido_materno,username,password} = req.body
-   /* insertarUsuario(connection, 
-        {nombres,apellido_paterno,apellido_materno,username,password},
-        result => {
+    //console.log(nombres,apellido_paterno,apellido_materno,username,pass);
+     insertarUsuario(connection,  
+        {nombres,apellido_paterno,apellido_materno,username,password :pass},
+        async result => {
             res.json(result);
-    })*/
+    })
 })
+/*app.post('/insertuser',  urlencodedParser, async (req, res) => {
+    const nombres = req.body.names;
+	const apellido_paterno = req.body.ape_pat;
+    const apellido_materno = req.body.ape_mat;
+    const username = req.body.username;
+	const pass = req.body.pass;
+    //console.log(nombres,apellido_paterno,apellido_materno,username,pass);
+     insertarUsuario(connection,  
+        {nombres,apellido_paterno,apellido_materno,username,password : await bcrypt.hash(pass, 8)},
+        async result => {
+            res.json(result);
+    })
+})*/
 
 /** Inserta municipio */
 app.post('/insertMunicipios', (req, res) => {
@@ -92,6 +158,9 @@ app.get('/map', (req, res) => {
     res.render('map', {})
 })
 
+app.get('/register', (req, res) => {
+    res.render('register', {})
+})
 app.get('/login', (req, res) => {
     res.render('login', {})
 })
