@@ -23,7 +23,8 @@ function readUser(connection, data ,callback) {
     let query = mysql.format(selectQuery, [data.id])
     connection.query(query, function (err, result) {
         if(err) throw err;
-        callback(err,result);  
+        callback(result); 
+        connection.end() 
     });
 }
 

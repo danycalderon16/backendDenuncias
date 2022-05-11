@@ -59,16 +59,30 @@ app.get('/user/:id',(req, res)=>{
 app.post('/auth', urlencodedParser,(req, res)=> {
 	const user = req.body.user;
 	const pass = req.body.pass;    
-	if (user && pass) {
-		readUser(connection, 
-            {id:user,pass},
-             (err,result) => {
-                if(err)console.log(err);          
-                if(pass == result[0].USUARIO_PASSWORD)       
-                    res.send(result)               
+   /* connection.query(
+        'SELECT * FROM usuarios WHERE USUARIO_USERNAME = ?',
+         [user], (error, results, fields) => {
+            (results) => {     
+                if(pass == results[0].USUARIO_PASSWORD)       
+                    res.send(results)               
                 else
                     res.send("Contraseña incorrecta")
             }
+         } )    */
+            
+	if (user && pass) {
+		readUser(connection, 
+            {id:user},
+             (result) => {    
+                if(!result[0]){
+                    res.send("Usuario no encontrado")
+                } else{
+                    if(pass == result[0].USUARIO_PASSWORD)       
+                       res.send(result)               
+                    else
+                        res.send("Contraseña incorrecta")
+                }
+             }
         )
 	} else {
 		res.send('Please enter user and Password!');
@@ -116,7 +130,7 @@ app.post('/insertuser',  urlencodedParser, (req, res) => {
     //console.log(nombres,apellido_paterno,apellido_materno,username,pass);
      insertarUsuario(connection,  
         {nombres,apellido_paterno,apellido_materno,username,password :pass},
-        async result => {
+        result => {
             res.json(result);
     })
 })
@@ -148,7 +162,6 @@ app.post('/insertMunicipios', (req, res) => {
 app.get('/readMunicipios', (req, res) => {
     readMunicipios(connection, 
         result => {
-        res.statusCode(200)
         res.json(result);
     })
 })
