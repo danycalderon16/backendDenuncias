@@ -1,0 +1,57 @@
+h1{
+    text-align: center;
+}
+
+.Seccion1{
+    text-align: center;
+    background-color: rgb(61, 184, 184);
+    width: 450px;
+    height: 300px;
+    float: left;
+    margin: 10px;
+    margin-left: 50px;
+}
+
+.Seccion2{
+    text-align: center;
+    background-color: rgb(61, 184, 184);
+    width: 450px;
+    height: 300px; 
+    float: left;
+    margin: 10px;
+}
+
+.Seccion3{
+    float: left;
+    margin: 10px;
+    width: 450px;
+    height: 300px; 
+    background-color: rgb(61, 184, 184);
+    text-align: center;
+}
+
+.Seccion4{
+    float: left;
+    margin: 10px;
+    width: 450px;
+    height: 300px; 
+    background-color: rgb(61, 184, 184);
+    text-align: center;
+    margin-left: 250px;
+}
+
+.Seccion5{
+    float: left;
+    margin: 10px;
+    width: 450px;
+    height: 300px; 
+    background-color: rgb(61, 184, 184);
+    text-align: center;
+}
+
+button{
+    float: left;
+    background-color: rgb(61, 184, 184);
+    color: black;
+    margin: 10px;
+}

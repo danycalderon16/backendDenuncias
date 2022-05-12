@@ -1,13 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../public/estilos.css">
-    <title>Document</title>
-</head>
-<body>
-    <h1>formulario</h1>
-</body>
+    <head>
+        <title> Formulario de Denuncia </title> 
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <link rel="stylesheet" href="resources/css/frorm.css">
+        <style>
+            *{
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 1.2rem;
+            }
+            body {
+                
+                padding: 2rem;
+            }
+            input,select, button{
+                width: 60%;
+                margin-bottom: 10px;
+            }
+            button{
+                height: 2rem;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1> FORMULARIO DE DENUNCIA </h1>
+        <form action="/insertIncidencia" method="POST">        
+            <div class="Seccion1">
+                    <h3>DATOS DEL LUGAR</h3><br>
+
+                    <b><label>Municipio</label></b><br>
+                    <select name="id_municipio" id="">
+                        <option value="1">Tepic</option>
+                        <option value="2">San Blas</option>
+                        <option value="3">Compostela</option>
+                        <option value="4">Xaliscp</option>
+                    </select><br>
+
+                    <b><label>Nivel educativo</label></b><br>
+                    <select name="" id="">
+                        <option value="">Preparatoria</option>
+                        <option value="">Universidad</option>
+                    </select><br>
+                    
+                   <b> <label>Institución</label> </b><br> 
+                    <select name="id_lugar" id="id_lugar">
+                        <option value="1">Cetis 100</option>
+                        <option value="2">Cecyten</option>
+                        <option value="3">Uan</option>
+                    </select><br>
+
+                    <label>Lugar efectuado</label><br>
+                    <select name="cmbLugarEfectuado" id="0">
+                        <option value="1">Dentro del aula</option>
+                        <option value="2">En una oficina o privado</option>
+                        <option value="3">Areas comunes</option>
+                        <option value="4">Baños</option>
+                        <option value="5">Fuera del plantel realizando una actividad académica</option>
+                        <option value="6">Fuera del plantel realizando otra actividad.</option>
+                    </select><br>
+            </div>
+
+            <div class="Seccion2">
+                    <h3>DATOS DEL INCIDENTE</h3><br>
+
+                    <label>Tipo de violencia</label><br>
+                    <select name="id_violencia" id="0">
+                        <option value="1">Verbal o Psicologica</option>
+                        <option value="2">Verbal</option>
+                        <option value="3">Fisica</option>
+                        <option value="4">Sexual</option>
+                    </select><br>
+                    
+                    <label>Descripción</label><br>
+                    <select name="incidencia_descripcion" id="">
+                        <option value="1">Bromas hirientes</option>
+                        <option value="2">Apodos</option>
+                        <option value="3">Engaños</option>
+                        <option value="4">Ignorar</option>
+                        <option value="5">Celar</option>
+                        <option value="6">Culpabilizar</option>
+                        <option value="7">Descalificar</option>
+                        <option value="8">Ridiculizar</option>
+                        <option value="9">Ofender</option>
+                        <option value="10">Humillar en publico</option>
+                        <option value="11">Controlar o Prohibir</option>
+                        <option value="12">Amenzas</option>
+                        <option value="13">Manipulación</option>
+                    </select><br>
+
+                    <label>Fecha</label><br>
+                    <input type="date" name="incidencia_fecha"><br>
+
+                    <label>Hora</label><br>
+                    <input type="time" name="incidencia_hora"><br>
+            </div>
+
+            <div class="Seccion3">
+                    <h3>DATOS DE LA VICTIMA</h3><br>
+
+                    <label>Edad</label><br>
+                    <input type="number" name="incidencia_edad_vic"> <br>
+
+                    <label>Sexo</label><br>
+                    <select name="incidencia_genero_vic" id="0">
+                        <option value="1">Mujer</option>
+                        <option value="1">Hombre</option>
+                    </select><br>
+
+                 
+            </div>
+            <div class="Seccion3">
+                    <h3>DATOS DEL AGRESOR</h3><br>
+
+                    <label>Nombre</label><br>
+                    <input type="text" name="incidencia_nombre_agr"> <br>
+                    <label>Edad</label><br>
+                    <input type="number" name="incidencia_edad_agr"> <br>
+
+                    <label>Sexo</label><br>
+                    <select name="incidencia_genero_agr" id="0">
+                        <option value="1">Mujer</option>
+                        <option value="1">Hombre</option>
+                    </select><br>
+
+                    <label>Persona que ejerció la violencia</label><br>
+                    <select name="cmbTipoPersona" id="0">
+                        <option value="1">Compañero de clase</option>
+                        <option value="2">Compañero de escuela</option>
+                        <option value="1">Relacion de noviazgo dentro de la escuela</option>
+                        <option value="2">Relacion de noviazgo fuera de la escuela</option>
+                        <option value="1">Maestro</option>
+                        <option value="2">Director</option>
+                        <option value="1">Personal Administrativo</option>
+                        <option value="2">Personal de labores varias</option>
+                        <option value="2">Personal ajeno a la escuela</option>
+                    </select><br>
+            </div>
+
+            <div class="Seccion4">
+                    <h3>DATOS POST - INCIDENTE</h3><br>
+
+                    <label>Acción Tomada</label><br>
+                    <select name="cmbAccionTomada" id="0">
+                        <option value="1">Denuncie ante un maestro</option>
+                        <option value="2">Denuncie ante una autoridad escolar</option>
+                        <option value="3">Denuncie ante una instancia</option>
+                        <option value="4">Ninguna</option>
+                    </select><br>
+
+                    <label>Tiempo Transcurrido</label><br>
+                    <select name="cmbTiempo" id="0">
+                        <option value="1">Mas de 12 meses</option>
+                        <option value="2">Entre 6 y 12 meses</option>
+                        <option value="3">Entre 3 y 6 meses</option>
+                        <option value="4">Menos de 3 meses</option>
+                        <option value="5">Ultimos 15 dias</option>
+                    </select><br>
+
+                    <label>Se necesito de otro servicio a consecuencia del incident</label><br>
+                    <select name="cmbOtroServicio" id="0">
+                        <option value="1">Atención psicologica</option>
+                        <option value="2">Atencion Psiquiatrica</option>
+                        <option value="3">Atencion Medica</option>
+                        <option value="4">Interrupcion Legal del embarazo</option>
+                        <option value="5">Ninguna</option>
+                    </select><br>
+            </div>
+
+            <div class="Seccion5">
+                    <h3>DATOS INFORMATIVOS</h3><br>
+
+                    <label>¿En tu institución recibes información sobre los tipos y modalidades de violencia?</label><br>
+                    <select name="cmbInformacion" id="0">
+                        <option value="1">Si</option>
+                        <option value="2">No</option>
+                    </select><br>
+
+                    <label>¿En tu institución existen mecanismos para denunciar acciones de violencia?</label><br>
+                    <select name="cmbMecanismos" id="0">
+                        <option value="1">Si</option>
+                        <option value="2">No</option>
+                    </select><br>
+            </div>
+
+            <button> Registar Incidencia </button>
+        </form>
+        
+        
+    </body>
 </html>

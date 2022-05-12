@@ -164,7 +164,9 @@ app.post('/insertIncidencia',  urlencodedParser, (req, res) => {
     const incidencia_nombre_agr = req.body.incidencia_nombre_agr;
     const incidencia_descripcion = req.body.incidencia_descripcion;
 
-    //console.log(nombres,apellido_paterno,apellido_materno,username,pass);
+    console.log(id_municipio,id_lugar,incidencia_fecha,incidencia_hora,id_violencia,
+        incidencia_edad_vic,incidencia_genero_vic,incidencia_edad_agr,incidencia_genero_agr,
+        incidencia_nombre_agr,incidencia_descripcion);
     insertarIncidencias(connection,  
         {id_municipio,id_lugar,incidencia_fecha,incidencia_hora,id_violencia,
             incidencia_edad_vic,incidencia_genero_vic,incidencia_edad_agr,
