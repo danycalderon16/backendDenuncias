@@ -5,7 +5,7 @@ const port = 5000
 const mysql = require('mysql')
 const bcrypt = require('bcryptjs');
 const bodyParser = require('body-parser')
-const {insertMunicipios,readMunicipios,insertarUsuario,readUsers,readUser} = require("./operations");
+const {insertMunicipios,readMunicipios,insertarUsuario,readUsers,readUser,insertarIncidencias,readIncidencias} = require("./operations");
 const swal = require ('sweetalert2');
 require('dotenv').config()
 
@@ -127,8 +127,8 @@ app.post('/insertuser',  urlencodedParser, (req, res) => {
     const apellido_materno = req.body.ape_mat;
     const username = req.body.username;
 	const pass = req.body.pass;
-    //console.log(nombres,apellido_paterno,apellido_materno,username,pass);
-     insertarUsuario(connection,  
+    console.log(nombres,apellido_paterno,apellido_materno,username,pass);
+   insertarUsuario(connection,  
         {nombres,apellido_paterno,apellido_materno,username,password :pass},
         result => {
             res.json(result);
@@ -148,11 +148,43 @@ app.post('/insertuser',  urlencodedParser, (req, res) => {
     })
 })*/
 
+/** Incidencias */
+
+// insertar incidencia
+app.post('/insertIncidencia',  urlencodedParser, (req, res) => {
+    const id_municipio = req.body.id_municipio;
+    const id_lugar = req.body.id_lugar;
+    const incidencia_fecha = req.body.incidencia_fecha;
+    const incidencia_hora = req.body.incidencia_hora;
+    const id_violencia = req.body.id_violencia;
+    const incidencia_edad_vic = req.body.incidencia_edad_vic;
+    const incidencia_genero_vic = req.body.incidencia_genero_vic;
+    const incidencia_edad_agr = req.body.incidencia_edad_agr;
+    const incidencia_genero_agr = req.body.incidencia_genero_agr;
+    const incidencia_nombre_agr = req.body.incidencia_nombre_agr;
+    const incidencia_descripcion = req.body.incidencia_descripcion;
+
+    //console.log(nombres,apellido_paterno,apellido_materno,username,pass);
+    insertarIncidencias(connection,  
+        {id_municipio,id_lugar,incidencia_fecha,incidencia_hora,id_violencia,
+            incidencia_edad_vic,incidencia_genero_vic,incidencia_edad_agr,
+            incidencia_genero_agr,incidencia_nombre_agr,incidencia_descripcion},
+        result => {
+            res.json(result);
+    })
+})
+app.get('/readIncidencias', (req, res) => {
+    readIncidencias(connection, 
+        result => {
+        res.json(result);
+    })
+})
+
 /** Inserta municipio */
-app.post('/insertMunicipios', (req, res) => {
-    const {municipio} = req.body
+app.post('/insertMunicipios',urlencodedParser, (req, res) => {
+    const municipio_nombre = req.body.municipio
     insertMunicipios(connection, 
-        {municipio_nombre: municipio},
+        {municipio_nombre: municipio_nombre},
         result => {
             res.json(result);
     })

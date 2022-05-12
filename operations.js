@@ -24,7 +24,7 @@ function readUser(connection, data ,callback) {
     connection.query(query, function (err, result) {
         if(err) throw err;
         callback(result); 
-        connection.end() 
+        //connection.end() 
     });
 }
 
@@ -47,13 +47,54 @@ function insertarUsuario(connection, data, callback) {
     connection.query(query, function (err, result) {
         if(err) throw err;
         callback(result);  
-        connection.end()
+        //connection.end()
     });
- 
 }
 //-----------------------
 
+/*** INCIDENCIAS */
+function insertarIncidencias(connection, data, callback) {
+    let insertQuery = `insert into \`registrosincidencias\`.\`incidencias\`(
+        \`ID_MUNICIPIO\`,
+        \`ID_LUGAR\`, 
+        \`INCIDENCIA_FECHA\`,
+        \`INCIDENCIA_HORA\`,
+        \`ID_VIOLENCIA\`,
+        \`INCIDENCIA_EDAD_VICTIMA\`,
+        \`INCIDENCIA_GENERO_VICTIMA\`,
+        \`INCIDENCIA_EDAD_AGRESOR\`,
+        \`INCIDENCIA_GENERO_AGRESOR\`,
+        \`INCIDENCIA_NOMBRE_AGRESOR\`,
+        \`INCIDENCIA_DESCRIP\`)        
+          values(?,?,?,?,?,?,?,?,?,?,?)`
+    let query = mysql.format(insertQuery, [
+        data.id_municipio,
+        data.id_lugar,
+        data.incidencia_fecha,
+        data.incidencia_hora,
+        data.id_violencia,
+        data.incidencia_edad_vic,
+        data.incidencia_genero_vic,
+        data.incidencia_edad_agr,
+        data.incidencia_genero_agr,
+        data.incidencia_nombre_agr,
+        data.incidencia_descripcion,
+    ])
+    connection.query(query, function (err, result) {
+        if(err) throw err;
+        callback(result);  
+        //connection.end()
+    });
+}
 
+function readIncidencias(connection, callback) {
+    connection.query("SELECT * FROM incidencias", function (err, result) {
+        if(err) throw err;
+        callback(result);  
+    });
+}
+
+//-----------------------------------------
 /** Municipios */
 function insertMunicipios(connection,data, callback) {
     let insertQuery = "INSERT INTO municipios(municipio_nombre) VALUES(?)"
@@ -61,7 +102,7 @@ function insertMunicipios(connection,data, callback) {
     connection.query(query, function (err, result) {
         if(err) throw err;
         callback(result);  
-        connection.end()
+       // connection.end()
     });
 
 }
@@ -80,5 +121,7 @@ module.exports = {
     readMunicipios,
     insertarUsuario,
     readUsers,
-    readUser
+    readUser,
+    insertarIncidencias,
+    readIncidencias
 }
