@@ -72,14 +72,15 @@ function insertarIncidencias(connection, data, callback) {
         \`INC_TIEMPO\`,
         \`INC_SERVICIO\`)        
           values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
+          console.log(data);
     let query = mysql.format(insertQuery, [
-        data.id_violencia,
         data.inc_municipio,
         data.inc_inst,
         data.inc_esp,
         data.inc_fecha,
         data.inc_hora,
-        data.inc_descr,
+        data.id_violencia,
+        data.inc_vio_descr,
         data.inc_vic_edad,
         data.inc_vic_genero,
         data.inc_agr_edad,
@@ -126,6 +127,29 @@ function readMunicipios(connection, callback) {
 
 //-------------------------------------------------
 
+//-----------------------------------------
+/** violencias */
+function insertviolencias(connection,data, callback) {
+    let insertQuery = "INSERT INTO violencias(tipo) VALUES(?)"
+    let query = mysql.format(insertQuery, [data.tipo])
+    connection.query(query, function (err, result) {
+        if(err) throw err;
+        callback(result);  
+       // connection.end()
+    });
+
+}
+
+function readviolencias(connection, callback) {
+    connection.query("SELECT * FROM violencias", function (err, result) {
+        if(err) throw err;
+        callback(result);  
+    });
+}
+
+//-------------------------------------------------
+
+
 module.exports = {
     insertMunicipios,
     readMunicipios,
@@ -133,5 +157,7 @@ module.exports = {
     readUsers,
     readUser,
     insertarIncidencias,
-    readIncidencias
+    readIncidencias,
+    insertviolencias,
+    readviolencias
 }

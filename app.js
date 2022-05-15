@@ -5,7 +5,10 @@ const port = 5000
 const mysql = require('mysql')
 const bcrypt = require('bcryptjs');
 const bodyParser = require('body-parser')
-const {insertMunicipios,readMunicipios,insertarUsuario,readUsers,readUser,insertarIncidencias,readIncidencias} = require("./operations");
+const {insertMunicipios,readMunicipios,insertarUsuario,
+    readUsers,readUser,insertarIncidencias,readIncidencias,
+    readviolencias,insertviolencias
+} = require("./operations");
 const swal = require ('sweetalert2');
 require('dotenv').config()
 
@@ -213,6 +216,23 @@ app.post('/insertMunicipios',urlencodedParser, (req, res) => {
 /** Leer municipios */
 app.get('/readMunicipios', (req, res) => {
     readMunicipios(connection, 
+        result => {
+        res.json(result);
+    })
+})
+/** Inserta violencias */
+app.post('/insertViolencias',urlencodedParser, (req, res) => {
+    const tipo = req.body.tipo
+    insertviolencias(connection, 
+        {tipo},
+        result => {
+            res.json(result);
+    })
+})
+
+/** Leer violencias */
+app.get('/readViolencias', (req, res) => {
+    readviolencias(connection, 
         result => {
         res.json(result);
     })
