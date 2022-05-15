@@ -152,26 +152,44 @@ app.post('/insertuser',  urlencodedParser, (req, res) => {
 
 // insertar incidencia
 app.post('/insertIncidencia',  urlencodedParser, (req, res) => {
-    const id_municipio = req.body.id_municipio;
-    const id_lugar = req.body.id_lugar;
-    const incidencia_fecha = req.body.incidencia_fecha;
-    const incidencia_hora = req.body.incidencia_hora;
-    const id_violencia = req.body.id_violencia;
-    const incidencia_edad_vic = req.body.incidencia_edad_vic;
-    const incidencia_genero_vic = req.body.incidencia_genero_vic;
-    const incidencia_edad_agr = req.body.incidencia_edad_agr;
-    const incidencia_genero_agr = req.body.incidencia_genero_agr;
-    const incidencia_nombre_agr = req.body.incidencia_nombre_agr;
-    const incidencia_descripcion = req.body.incidencia_descripcion;
+    const inc_municipio = req.body.inc_municipio;
+    const inc_inst = req.body.inc_inst;
+    const inc_esp = req.body.inc_esp;
+    const inc_fecha = req.body.inc_fecha;
+    const inc_hora = req.body.inc_hora;
+    const id_violencia = parseInt(req.body.id_violencia);
+    const inc_vio_descr = req.body.inc_vio_descr;
+    const inc_vic_edad = req.body.inc_vic_edad;
+    const inc_vic_genero = req.body.inc_vic_genero;
+    const inc_agr_edad = req.body.inc_agr_edad;
+    const inc_agr_genero = req.body.inc_agr_genero;
+    const inc_agr_nombre = req.body.inc_agr_nombre;
+    const inc_agr_tipo = req.body.inc_agr_tipo;
+    const inc_accion = req.body.inc_accion;
+    const inc_tiempo = req.body.inc_tiempo;
+    const inc_servicio = req.body.inc_servicio;
 
-    console.log(id_municipio,id_lugar,incidencia_fecha,incidencia_hora,id_violencia,
-        incidencia_edad_vic,incidencia_genero_vic,incidencia_edad_agr,incidencia_genero_agr,
-        incidencia_nombre_agr,incidencia_descripcion);
-    insertarIncidencias(connection,  
-        {id_municipio,id_lugar,incidencia_fecha,incidencia_hora,id_violencia,
-            incidencia_edad_vic,incidencia_genero_vic,incidencia_edad_agr,
-            incidencia_genero_agr,incidencia_nombre_agr,incidencia_descripcion},
-        result => {
+    const data = {
+        inc_municipio,
+        inc_inst,
+        inc_esp,
+        inc_fecha,
+        inc_hora,
+        id_violencia,
+        inc_vio_descr,
+        inc_vic_edad,
+        inc_vic_genero,
+        inc_agr_edad,
+        inc_agr_genero,
+        inc_agr_nombre,
+        inc_agr_tipo,
+        inc_accion,
+        inc_tiempo,
+        inc_servicio
+    }
+
+    console.log(data);
+    insertarIncidencias(connection,data,result => {
             res.json(result);
     })
 })

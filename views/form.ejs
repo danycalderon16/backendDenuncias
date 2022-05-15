@@ -33,7 +33,7 @@
                     <h3>DATOS DEL LUGAR</h3><br>
 
                     <b><label>Municipio</label></b><br>
-                    <select name="id_municipio" id="">
+                    <select name="inc_municipio" id="">
                         <option value="1">Tepic</option>
                         <option value="2">San Blas</option>
                         <option value="3">Compostela</option>
@@ -47,14 +47,14 @@
                     </select><br>
                     
                    <b> <label>Institución</label> </b><br> 
-                    <select name="id_lugar" id="id_lugar">
+                    <select name="inc_inst" id="inc_inst">
                         <option value="1">Cetis 100</option>
                         <option value="2">Cecyten</option>
                         <option value="3">Uan</option>
                     </select><br>
 
                     <label>Lugar efectuado</label><br>
-                    <select name="cmbLugarEfectuado" id="0">
+                    <select name="inc_esp" id="inc_esp">
                         <option value="1">Dentro del aula</option>
                         <option value="2">En una oficina o privado</option>
                         <option value="3">Areas comunes</option>
@@ -76,7 +76,7 @@
                     </select><br>
                     
                     <label>Descripción</label><br>
-                    <select name="incidencia_descripcion" id="">
+                    <select name="inc_vio_descr" id="inc_vio_descr">
                         <option value="1">Bromas hirientes</option>
                         <option value="2">Apodos</option>
                         <option value="3">Engaños</option>
@@ -93,20 +93,20 @@
                     </select><br>
 
                     <label>Fecha</label><br>
-                    <input type="date" name="incidencia_fecha"><br>
+                    <input type="date" name="inc_fecha"><br>
 
                     <label>Hora</label><br>
-                    <input type="time" name="incidencia_hora"><br>
+                    <input type="time" name="inc_hora"><br>
             </div>
 
             <div class="Seccion3">
                     <h3>DATOS DE LA VICTIMA</h3><br>
 
                     <label>Edad</label><br>
-                    <input type="number" name="incidencia_edad_vic"> <br>
+                    <input type="number" name="inc_vic_edad"> <br>
 
                     <label>Sexo</label><br>
-                    <select name="incidencia_genero_vic" id="0">
+                    <select name="inc_vic_genero" id="0">
                         <option value="1">Mujer</option>
                         <option value="1">Hombre</option>
                     </select><br>
@@ -117,18 +117,18 @@
                     <h3>DATOS DEL AGRESOR</h3><br>
 
                     <label>Nombre</label><br>
-                    <input type="text" name="incidencia_nombre_agr"> <br>
+                    <input type="text" name="inc_agr_nombre"> <br>
                     <label>Edad</label><br>
-                    <input type="number" name="incidencia_edad_agr"> <br>
+                    <input type="number" name="inc_agr_edad"> <br>
 
                     <label>Sexo</label><br>
-                    <select name="incidencia_genero_agr" id="0">
+                    <select name="inc_agr_genero" id="0">
                         <option value="1">Mujer</option>
                         <option value="1">Hombre</option>
                     </select><br>
 
                     <label>Persona que ejerció la violencia</label><br>
-                    <select name="cmbTipoPersona" id="0">
+                    <select name="inc_agr_tipo" id="inc_agr_tipo">
                         <option value="1">Compañero de clase</option>
                         <option value="2">Compañero de escuela</option>
                         <option value="1">Relacion de noviazgo dentro de la escuela</option>
@@ -145,7 +145,7 @@
                     <h3>DATOS POST - INCIDENTE</h3><br>
 
                     <label>Acción Tomada</label><br>
-                    <select name="cmbAccionTomada" id="0">
+                    <select name="inc_accion" id="0">
                         <option value="1">Denuncie ante un maestro</option>
                         <option value="2">Denuncie ante una autoridad escolar</option>
                         <option value="3">Denuncie ante una instancia</option>
@@ -153,7 +153,7 @@
                     </select><br>
 
                     <label>Tiempo Transcurrido</label><br>
-                    <select name="cmbTiempo" id="0">
+                    <select name="inc_tiempo" id="0">
                         <option value="1">Mas de 12 meses</option>
                         <option value="2">Entre 6 y 12 meses</option>
                         <option value="3">Entre 3 y 6 meses</option>
@@ -162,7 +162,7 @@
                     </select><br>
 
                     <label>Se necesito de otro servicio a consecuencia del incident</label><br>
-                    <select name="cmbOtroServicio" id="0">
+                    <select name="inc_servicio" id="0">
                         <option value="1">Atención psicologica</option>
                         <option value="2">Atencion Psiquiatrica</option>
                         <option value="3">Atencion Medica</option>

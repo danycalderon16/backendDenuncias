@@ -55,30 +55,40 @@ function insertarUsuario(connection, data, callback) {
 /*** INCIDENCIAS */
 function insertarIncidencias(connection, data, callback) {
     let insertQuery = `insert into \`registrosincidencias\`.\`incidencias\`(
-        \`ID_MUNICIPIO\`,
-        \`ID_LUGAR\`, 
-        \`INCIDENCIA_FECHA\`,
-        \`INCIDENCIA_HORA\`,
-        \`ID_VIOLENCIA\`,
-        \`INCIDENCIA_EDAD_VICTIMA\`,
-        \`INCIDENCIA_GENERO_VICTIMA\`,
-        \`INCIDENCIA_EDAD_AGRESOR\`,
-        \`INCIDENCIA_GENERO_AGRESOR\`,
-        \`INCIDENCIA_NOMBRE_AGRESOR\`,
-        \`INCIDENCIA_DESCRIP\`)        
-          values(?,?,?,?,?,?,?,?,?,?,?)`
+        \`INC_MUN\`,
+        \`INC_INST\`,
+        \`INC_ESP\`,
+        \`INC_FECHA\`,
+        \`INC_HORA\`,
+        \`violencias_ID_VIOLENCIA\`,
+        \`INC_VIO_DESCR\`,
+        \`INC_VIC_EDAD\`,
+        \`INC_VIC_GENERO\`,
+        \`INC_AGR_EDAD\`,
+        \`INC_AGR_GENERO\`,
+        \`INC_AGR_NOMBRE\`,
+        \`INC_AGR_TIPO\`,
+        \`INC_ACCION\`,
+        \`INC_TIEMPO\`,
+        \`INC_SERVICIO\`)        
+          values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
     let query = mysql.format(insertQuery, [
-        data.id_municipio,
-        data.id_lugar,
-        data.incidencia_fecha,
-        data.incidencia_hora,
         data.id_violencia,
-        data.incidencia_edad_vic,
-        data.incidencia_genero_vic,
-        data.incidencia_edad_agr,
-        data.incidencia_genero_agr,
-        data.incidencia_nombre_agr,
-        data.incidencia_descripcion,
+        data.inc_municipio,
+        data.inc_inst,
+        data.inc_esp,
+        data.inc_fecha,
+        data.inc_hora,
+        data.inc_descr,
+        data.inc_vic_edad,
+        data.inc_vic_genero,
+        data.inc_agr_edad,
+        data.inc_agr_genero,
+        data.inc_agr_nombre,
+        data.inc_agr_tipo,
+        data.inc_accion,
+        data.inc_tiempo,
+        data.inc_servicio,
     ])
     connection.query(query, function (err, result) {
         if(err) throw err;
