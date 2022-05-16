@@ -235,12 +235,20 @@ app.get('/readViolencias', (req, res) => {
     readviolencias(connection, 
         result => {
         res.json(result);
+        //res.render('map', {result:result})
     })
 })
 
 
 app.get('/map', (req, res) => {
-    res.render('map', {})
+    connection.query('SELECT institucion.inst_nombre , COUNT(incidencias.INC_INST) AS Casos FROM  institucion ' +
+            'LEFT JOIN incidencias ON incidencias.INC_INST = institucion.ID_INST;',(error, result) =>{
+                if(error){
+                    throw error
+                }else{
+                    res.render('map', {result,result})
+                }
+            })
 })
 
 app.get('/register', (req, res) => {

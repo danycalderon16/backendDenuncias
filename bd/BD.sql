@@ -120,7 +120,6 @@ CREATE TABLE IF NOT EXISTS `registrosincidencias`.`institucion` (
   `ID_INST` INT NOT NULL AUTO_INCREMENT,
   `INST_NOMBRE` VARCHAR(100) NOT NULL,
   `INST_NIVEL` VARCHAR(50) NOT NULL,
-  `ID_MUNICIPIO` INT NOT NULL,
   `municipios_ID_MUNICIPIO` INT NOT NULL,
   PRIMARY KEY (`ID_INST`),
   INDEX `fk_institucion_municipios1_idx` (`municipios_ID_MUNICIPIO` ASC) VISIBLE,
