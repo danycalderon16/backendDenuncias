@@ -192,9 +192,9 @@ app.post('/insertIncidencia',  urlencodedParser, (req, res) => {
     }
 
     console.log(data);
-    insertarIncidencias(connection,data,result => {
-            res.json(result);
-    })
+   // insertarIncidencias(connection,data,result => {
+     //       res.json(result);
+    //})
 })
 app.get('/readIncidencias', (req, res) => {
     readIncidencias(connection, 
