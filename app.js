@@ -7,7 +7,9 @@ const bcrypt = require('bcryptjs');
 const bodyParser = require('body-parser')
 const {insertMunicipios,readMunicipios,insertarUsuario,
     readUsers,readUser,insertarIncidencias,readIncidencias,
-    readviolencias,insertviolencias
+    readviolencias,insertviolencias,
+    readInstitucion,
+    insertInstitucion
 } = require("./operations");
 const swal = require ('sweetalert2');
 require('dotenv').config()
@@ -192,9 +194,9 @@ app.post('/insertIncidencia',  urlencodedParser, (req, res) => {
     }
 
     console.log(data);
-   // insertarIncidencias(connection,data,result => {
-     //       res.json(result);
-    //})
+    insertarIncidencias(connection,data,result => {
+           res.json(result);
+    })
 })
 app.get('/readIncidencias', (req, res) => {
     readIncidencias(connection, 
@@ -220,6 +222,27 @@ app.get('/readMunicipios', (req, res) => {
         res.json(result);
     })
 })
+
+/** Inserta INSTITUCION */
+app.post('/insertInstitucion',urlencodedParser, (req, res) => {
+    const nombre = req.body.nombre
+    const nivel = req.body.nivel
+    const municipio = req.body.municipio
+    insertInstitucion(connection, 
+        {nombre, nivel,municipio},
+        result => {
+            res.json(result);
+    })
+})
+
+/** Leer INSTITUCION */
+app.get('/readInstitucion', (req, res) => {
+    readInstitucion(connection, 
+        result => {
+        res.json(result);
+        //res.render('map', {result:result})
+    })
+})
 /** Inserta violencias */
 app.post('/insertViolencias',urlencodedParser, (req, res) => {
     const tipo = req.body.tipo
@@ -241,11 +264,13 @@ app.get('/readViolencias', (req, res) => {
 
 
 app.get('/map', (req, res) => {
-    connection.query('SELECT institucion.inst_nombre , COUNT(incidencias.INC_INST) AS Casos FROM  institucion ' +
-            'LEFT JOIN incidencias ON incidencias.INC_INST = institucion.ID_INST;',(error, result) =>{
+    connection.query('select INSTITUCION.INST_NOMBRE as nombre, count(INCIDENCIAS.INC_INST) as casos from INCIDENCIAS '+
+	'inner JOIN INSTITUCION ON INCIDENCIAS.INC_INST = INSTITUCION.ID_INST '+
+	'group by INCIDENCIAS.INC_INST',(error, result) =>{
                 if(error){
                     throw error
                 }else{
+                    //res.json(result);
                     res.render('map', {result,result})
                 }
             })

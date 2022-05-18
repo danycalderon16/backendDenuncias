@@ -8,19 +8,19 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- Schema mydb
 -- -----------------------------------------------------
 -- -----------------------------------------------------
--- Schema registrosincidencias
+-- Schema buwxtrggyndydpdzaxd9
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema registrosincidencias
+-- Schema buwxtrggyndydpdzaxd9
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `registrosincidencias` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
-USE `registrosincidencias` ;
+CREATE SCHEMA IF NOT EXISTS `buwxtrggyndydpdzaxd9` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
+USE `buwxtrggyndydpdzaxd9` ;
 
 -- -----------------------------------------------------
--- Table `registrosincidencias`.`violencias`
+-- Table `buwxtrggyndydpdzaxd9`.`violencias`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `registrosincidencias`.`violencias` (
+CREATE TABLE IF NOT EXISTS `buwxtrggyndydpdzaxd9`.`violencias` (
   `ID_VIOLENCIA` INT NOT NULL AUTO_INCREMENT,
   `VIOLENCIA_TIPO` VARCHAR(30) NOT NULL,
   PRIMARY KEY (`ID_VIOLENCIA`))
@@ -29,9 +29,9 @@ DEFAULT CHARACTER SET = utf8mb3;
 
 
 -- -----------------------------------------------------
--- Table `registrosincidencias`.`incidencias`
+-- Table `buwxtrggyndydpdzaxd9`.`incidencias`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `registrosincidencias`.`incidencias` (
+CREATE TABLE IF NOT EXISTS `buwxtrggyndydpdzaxd9`.`incidencias` (
   `ID_INCIDENCIA` INT NOT NULL AUTO_INCREMENT,
   `INC_MUN` VARCHAR(50) NOT NULL,  
   `INC_INST` VARCHAR(100) NOT NULL,  
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `registrosincidencias`.`incidencias` (
   INDEX `fk_incidencias_violencias_idx` (`violencias_ID_VIOLENCIA` ASC) VISIBLE,
   CONSTRAINT `fk_incidencias_violencias`
     FOREIGN KEY (`violencias_ID_VIOLENCIA`)
-    REFERENCES `registrosincidencias`.`violencias` (`ID_VIOLENCIA`)
+    REFERENCES `buwxtrggyndydpdzaxd9`.`violencias` (`ID_VIOLENCIA`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -61,9 +61,9 @@ DEFAULT CHARACTER SET = utf8mb3;
 
 
 -- -----------------------------------------------------
--- Table `registrosincidencias`.`usuarios`
+-- Table `buwxtrggyndydpdzaxd9`.`usuarios`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `registrosincidencias`.`usuarios` (
+CREATE TABLE IF NOT EXISTS `buwxtrggyndydpdzaxd9`.`usuarios` (
   `ID_USUARIO` INT NOT NULL AUTO_INCREMENT,
   `USUARIO_NOMBRES` VARCHAR(50) NOT NULL,
   `USUARIO_APE_PATERNO` VARCHAR(45) NOT NULL,
@@ -78,9 +78,9 @@ DEFAULT CHARACTER SET = utf8mb3;
 
 
 -- -----------------------------------------------------
--- Table `registrosincidencias`.`consultas`
+-- Table `buwxtrggyndydpdzaxd9`.`consultas`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `registrosincidencias`.`consultas` (
+CREATE TABLE IF NOT EXISTS `buwxtrggyndydpdzaxd9`.`consultas` (
   `ID_CONSULTA` INT NOT NULL AUTO_INCREMENT,
   `incidencias_ID_INCIDENCIA` INT NOT NULL,
   `usuarios_ID_USUARIO` INT NOT NULL,
@@ -89,12 +89,12 @@ CREATE TABLE IF NOT EXISTS `registrosincidencias`.`consultas` (
   INDEX `fk_consultas_usuarios_idx` (`usuarios_ID_USUARIO` ASC) VISIBLE,
   CONSTRAINT `fk_consultas_incidencias`
     FOREIGN KEY (`incidencias_ID_INCIDENCIA`)
-    REFERENCES `registrosincidencias`.`incidencias` (`ID_INCIDENCIA`)
+    REFERENCES `buwxtrggyndydpdzaxd9`.`incidencias` (`ID_INCIDENCIA`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_consultas_usuarios1`
     FOREIGN KEY (`usuarios_ID_USUARIO`)
-    REFERENCES `registrosincidencias`.`usuarios` (`ID_USUARIO`)
+    REFERENCES `buwxtrggyndydpdzaxd9`.`usuarios` (`ID_USUARIO`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -102,9 +102,9 @@ DEFAULT CHARACTER SET = utf8mb3;
 
 
 -- -----------------------------------------------------
--- Table `registrosincidencias`.`municipios`
+-- Table `buwxtrggyndydpdzaxd9`.`municipios`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `registrosincidencias`.`municipios` (
+CREATE TABLE IF NOT EXISTS `buwxtrggyndydpdzaxd9`.`municipios` (
   `ID_MUNICIPIO` INT NOT NULL AUTO_INCREMENT,
   `MUNICIPIO_NOMBRE` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`ID_MUNICIPIO`))
@@ -114,9 +114,9 @@ DEFAULT CHARACTER SET = utf8mb3;
 
 
 -- -----------------------------------------------------
--- Table `registrosincidencias`.`institucion`
+-- Table `buwxtrggyndydpdzaxd9`.`institucion`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `registrosincidencias`.`institucion` (
+CREATE TABLE IF NOT EXISTS `buwxtrggyndydpdzaxd9`.`institucion` (
   `ID_INST` INT NOT NULL AUTO_INCREMENT,
   `INST_NOMBRE` VARCHAR(100) NOT NULL,
   `INST_NIVEL` VARCHAR(50) NOT NULL,
@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `registrosincidencias`.`institucion` (
   INDEX `fk_institucion_municipios1_idx` (`municipios_ID_MUNICIPIO` ASC) VISIBLE,
   CONSTRAINT `fk_institucion_municipios`
     FOREIGN KEY (`municipios_ID_MUNICIPIO`)
-    REFERENCES `registrosincidencias`.`municipios` (`ID_MUNICIPIO`)
+    REFERENCES `buwxtrggyndydpdzaxd9`.`municipios` (`ID_MUNICIPIO`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -133,9 +133,9 @@ DEFAULT CHARACTER SET = utf8mb3;
 
 
 -- -----------------------------------------------------
--- Table `registrosincidencias`.`espacios`
+-- Table `buwxtrggyndydpdzaxd9`.`espacios`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `registrosincidencias`.`espacios` (
+CREATE TABLE IF NOT EXISTS `buwxtrggyndydpdzaxd9`.`espacios` (
   `ID_ESPACIO` INT NOT NULL AUTO_INCREMENT,
   `ESPACIO_NOMBRE` VARCHAR(45) NOT NULL,
   `institucion_ID_INST` INT NOT NULL,
@@ -143,7 +143,7 @@ CREATE TABLE IF NOT EXISTS `registrosincidencias`.`espacios` (
   INDEX `fk_espacios_institucion_idx` (`institucion_ID_INST` ASC) VISIBLE,
   CONSTRAINT `fk_espacios_institucion`
     FOREIGN KEY (`institucion_ID_INST`)
-    REFERENCES `registrosincidencias`.`institucion` (`ID_INST`)
+    REFERENCES `buwxtrggyndydpdzaxd9`.`institucion` (`ID_INST`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB

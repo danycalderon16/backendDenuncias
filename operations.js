@@ -4,14 +4,14 @@ const mysql = require ('mysql')
 
 /** Usuarios */
 function readUsers(connection, callback) {
-    connection.query("SELECT * FROM usuarios", function (err, result) {
+    connection.query("SELECT * FROM USUARIOS", function (err, result) {
         if(err) throw err;
         callback(result);  
     });
 }
 /*
 function readUser(connection, data ,callback) {
-    let selectQuery = "SELECT * FROM usuarios where USUARIO_USERNAME = ? and USUARIO_PASSWORD = ?"
+    let selectQuery = "SELECT * FROM USUARIOS where USUARIO_USERNAME = ? and USUARIO_PASSWORD = ?"
     let query = mysql.format(selectQuery, [data.id,data.pass])
     connection.query(query, function (err, result) {
         if(err) throw err;
@@ -19,7 +19,7 @@ function readUser(connection, data ,callback) {
     });
 }*/
 function readUser(connection, data ,callback) {
-    let selectQuery = "SELECT * FROM usuarios where USUARIO_USERNAME = ? "
+    let selectQuery = "SELECT * FROM USUARIOS where USUARIO_USERNAME = ? "
     let query = mysql.format(selectQuery, [data.id])
     connection.query(query, function (err, result) {
         if(err) throw err;
@@ -30,7 +30,7 @@ function readUser(connection, data ,callback) {
 
 
 function insertarUsuario(connection, data, callback) {
-    let insertQuery = `insert into \`registrosincidencias\`.\`usuarios\`(
+    let insertQuery = `insert into \`USUARIOS\`(
         \`USUARIO_NOMBRES\`,
         \`USUARIO_APE_PATERNO\`, 
         \`USUARIO_APE_MAETRNO\`,  
@@ -54,7 +54,7 @@ function insertarUsuario(connection, data, callback) {
 
 /*** INCIDENCIAS */
 function insertarIncidencias(connection, data, callback) {
-    let insertQuery = `insert into \`registrosincidencias\`.\`incidencias\`(
+    let insertQuery = `insert into \`INCIDENCIAS\`(
         \`INC_MUN\`,
         \`INC_INST\`,
         \`INC_ESP\`,
@@ -99,16 +99,16 @@ function insertarIncidencias(connection, data, callback) {
 }
 
 function readIncidencias(connection, callback) {
-    connection.query("SELECT * FROM incidencias", function (err, result) {
+    connection.query("SELECT * FROM INCIDENCIAS", function (err, result) {
         if(err) throw err;
         callback(result);  
     });
 }
 
 //-----------------------------------------
-/** Municipios */
+/** MUNICIPIOS */
 function insertMunicipios(connection,data, callback) {
-    let insertQuery = "INSERT INTO municipios(municipio_nombre) VALUES(?)"
+    let insertQuery = "INSERT INTO MUNICIPIOS(municipio_nombre) VALUES(?)"
     let query = mysql.format(insertQuery, [data.municipio_nombre])
     connection.query(query, function (err, result) {
         if(err) throw err;
@@ -119,7 +119,7 @@ function insertMunicipios(connection,data, callback) {
 }
 
 function readMunicipios(connection, callback) {
-    connection.query("SELECT * FROM municipios", function (err, result) {
+    connection.query("SELECT * FROM MUNICIPIOS", function (err, result) {
         if(err) throw err;
         callback(result);  
     });
@@ -128,9 +128,29 @@ function readMunicipios(connection, callback) {
 //-------------------------------------------------
 
 //-----------------------------------------
-/** violencias */
+/** Institucion */
+function insertInstitucion(connection,data, callback) {
+    let insertQuery = "INSERT INTO INSTITUCION(INST_NOMBRE,INST_NIVEL, municipios_ID_MUNICIPIO) VALUES(?,?,?)"
+    let query = mysql.format(insertQuery, [data.nombre, data.nivel, data.municipio])
+    connection.query(query, function (err, result) {
+        if(err) throw err;
+        callback(result);  
+       // connection.end()
+    });
+
+}
+
+function readInstitucion(connection, callback) {
+    connection.query("SELECT * FROM INSTITUCION", function (err, result) {
+        if(err) throw err;
+        callback(result);  
+    });
+}
+
+//-------------------------------------------------
+/** VIOLENCIAS */
 function insertviolencias(connection,data, callback) {
-    let insertQuery = "INSERT INTO violencias(tipo) VALUES(?)"
+    let insertQuery = "INSERT INTO VIOLENCIAS(VIOLENCIA_TIPO) VALUES(?)"
     let query = mysql.format(insertQuery, [data.tipo])
     connection.query(query, function (err, result) {
         if(err) throw err;
@@ -141,7 +161,7 @@ function insertviolencias(connection,data, callback) {
 }
 
 function readviolencias(connection, callback) {
-    connection.query("SELECT * FROM violencias", function (err, result) {
+    connection.query("SELECT * FROM VIOLENCIAS", function (err, result) {
         if(err) throw err;
         callback(result);  
     });
@@ -159,5 +179,7 @@ module.exports = {
     insertarIncidencias,
     readIncidencias,
     insertviolencias,
-    readviolencias
+    readviolencias,
+    readInstitucion,
+    insertInstitucion
 }
