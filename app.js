@@ -240,7 +240,6 @@ app.get('/readInstitucion', (req, res) => {
     readInstitucion(connection, 
         result => {
         res.json(result);
-        //res.render('map', {result:result})
     })
 })
 /** Inserta violencias */
@@ -263,15 +262,39 @@ app.get('/readViolencias', (req, res) => {
 })
 
 
-app.get('/map', (req, res) => {
-    connection.query('select INSTITUCION.INST_NOMBRE as nombre, count(INCIDENCIAS.INC_INST) as casos from INCIDENCIAS '+
+app.get('/mapLugar', (req, res) => {
+    connection.query('select INSTITUCION.INST_NOMBRE as nombre, INCIDENCIAS.INC_ESP as lugar, count(INCIDENCIAS.INC_ESP) as casos from INCIDENCIAS '+
 	'inner JOIN INSTITUCION ON INCIDENCIAS.INC_INST = INSTITUCION.ID_INST '+
-	'group by INCIDENCIAS.INC_INST',(error, result) =>{
+	'group by INCIDENCIAS.INC_ESP',(error, result) =>{
                 if(error){
                     throw error
                 }else{
-                    //res.json(result);
-                    res.render('map', {result,result})
+                    res.json(result);
+                    //res.render('map', {result,result})
+                }
+            })
+})
+app.get('/mapGenero', (req, res) => {
+    connection.query('select INSTITUCION.INST_NOMBRE as nombre, INCIDENCIAS.INC_VIC_GENERO as genero, count(INCIDENCIAS.INC_VIC_GENERO) as casos from INCIDENCIAS '+
+	'inner JOIN INSTITUCION ON INCIDENCIAS.INC_INST = INSTITUCION.ID_INST '+
+	'group by INSTITUCION.INST_NOMBRE',(error, result) =>{
+                if(error){
+                    throw error
+                }else{
+                    res.json(result);
+                    //res.render('map', {result,result})
+                }
+            })
+})
+app.get('/mapMunicipios', (req, res) => {
+    connection.query('select MUNICIPIOS.MUNICIPIO_NOMBRE as municipio, count(MUNICIPIOS.MUNICIPIO_NOMBRE) as casos from MUNICIPIOS '+
+	'inner JOIN INCIDENCIAS ON MUNICIPIOS.ID_MUNICIPIO = INC_MUN '+
+	'group by MUNICIPIOS.MUNICIPIO_NOMBRE',(error, result) =>{
+                if(error){
+                    throw error
+                }else{
+                    res.json(result);
+                    //res.render('map', {result,result})
                 }
             })
 })
@@ -299,6 +322,34 @@ connection.connect((err)=>{
     if (err) throw err
     console.log("Connectado a la base de datos");
 });
+
+function handleDisconnect() {
+    cn = mysql.createConnection({
+        host: process.env.DBHOST,
+        user:process.env.DBUSER,
+        password:process.env.PASSWORD,
+        database:process.env.DATABASE,
+    }); // Recreate the connection, since
+                                                    // the old one cannot be reused.
+  
+    cn.connect(function(err) {              // The server is either down
+      if(err) {                                     // or restarting (takes a while sometimes).
+        console.log('error when connecting to db:', err);
+        setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
+      }                                     // to avoid a hot loop, and to allow our node script to
+    });                                     // process asynchronous requests in the meantime.
+                                            // If you're also serving http, display a 503 error.
+    cn.on('error', function(err) {
+      console.log('db error', err);
+      if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
+        handleDisconnect();                         // lost due to either server restart, or a
+      } else {                                      // connnection idle timeout (the wait_timeout
+        throw err;                                  // server variable configures this)
+      }
+    });
+  }
+  
+  handleDisconnect();
 
 
 // Listen on Port 5000
