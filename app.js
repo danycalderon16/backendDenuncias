@@ -127,16 +127,16 @@ app.post('/auth', urlencodedParser, async (req, res)=> {
 */
 /** Insertamos un usuario */
 app.post('/insertuser',  urlencodedParser, (req, res) => {
-    const nombres = req.body.names;
+    const nombres = req.body.nombre;
 	const apellido_paterno = req.body.ape_pat;
     const apellido_materno = req.body.ape_mat;
-    const username = req.body.username;
-	const pass = req.body.pass;
+    const username = req.body.usuario;
+	const pass = req.body.passwordEncryp;
     console.log(nombres,apellido_paterno,apellido_materno,username,pass);
    insertarUsuario(connection,  
         {nombres,apellido_paterno,apellido_materno,username,password :pass},
         result => {
-            res.json(result);
+           res.json(result);
     })
 })
 /*app.post('/insertuser',  urlencodedParser, async (req, res) => {
@@ -157,22 +157,22 @@ app.post('/insertuser',  urlencodedParser, (req, res) => {
 
 // insertar incidencia
 app.post('/insertIncidencia',  urlencodedParser, (req, res) => {
-    const inc_municipio = req.body.inc_municipio;
-    const inc_inst = req.body.inc_inst;
-    const inc_esp = req.body.inc_esp;
-    const inc_fecha = req.body.inc_fecha;
-    const inc_hora = req.body.inc_hora;
-    const id_violencia = parseInt(req.body.id_violencia);
-    const inc_vio_descr = req.body.inc_vio_descr;
-    const inc_vic_edad = req.body.inc_vic_edad;
-    const inc_vic_genero = req.body.inc_vic_genero;
-    const inc_agr_edad = req.body.inc_agr_edad;
-    const inc_agr_genero = req.body.inc_agr_genero;
-    const inc_agr_nombre = req.body.inc_agr_nombre;
-    const inc_agr_tipo = req.body.inc_agr_tipo;
-    const inc_accion = req.body.inc_accion;
-    const inc_tiempo = req.body.inc_tiempo;
-    const inc_servicio = req.body.inc_servicio;
+    const inc_municipio = req.body.INC_MUN;
+    const inc_inst = req.body.INC_INST;
+    const inc_esp = req.body.INC_ESP;
+    const inc_fecha = req.body.INC_FECHA;
+    const inc_hora = req.body.INC_HORA;
+    const id_violencia = parseInt(req.body.violencias_ID_VIOLENCIA);
+    const inc_vio_descr = req.body.INC_VIO_DESCR;
+    const inc_vic_edad = req.body.INC_VIC_EDAD;
+    const inc_vic_genero = req.body.INC_VIC_GENERO;
+    const inc_agr_edad = req.body.INC_AGR_EDAD;
+    const inc_agr_genero = req.body.INC_AGR_GENERO;
+    const inc_agr_nombre = req.body.INC_AGR_NOMBRE;
+    const inc_agr_tipo = req.body.INC_AGR_TIPO;
+    const inc_accion = req.body.INC_ACCION;
+    const inc_tiempo = req.body.INC_TIEMPO;
+    const inc_servicio = req.body.INC_SERVICIO;
 
     const data = {
         inc_municipio,
@@ -192,10 +192,10 @@ app.post('/insertIncidencia',  urlencodedParser, (req, res) => {
         inc_tiempo,
         inc_servicio
     }
-
+    console.log("Hola");
     console.log(data);
     insertarIncidencias(connection,data,result => {
-           res.json(result);
+           res.json(result);    
     })
 })
 app.get('/readIncidencias', (req, res) => {
@@ -242,8 +242,24 @@ app.get('/readInstitucion', (req, res) => {
         res.json(result);
     })
 })
+app.get('/readInstitucionBy/:nivel&:municipio', (req, res) => {
+    const nivel = req.params.nivel;
+    const municipio = req.params.municipio;
+    console.log(nivel,municipio);
+    connection.query('select * from INSTITUCION '+
+    'where INST_NIVEL = \''+nivel+'\' and MUNICIPIOS_ID_MUNICIPIO = '+
+	'(Select ID_MUNICIPIO from MUNICIPIOS where ID_MUNICIPIO = '+municipio+');',(error, result) =>{
+                if(error){
+                    throw error
+                }else{
+                    res.json(result);
+                    //res.render('map', {result,result})
+                }
+            })
+})
 /** Inserta violencias */
 app.post('/insertViolencias',urlencodedParser, (req, res) => {
+    console.log("Hola"); 
     const tipo = req.body.tipo
     insertviolencias(connection, 
         {tipo},
@@ -274,7 +290,7 @@ app.get('/mapLugar', (req, res) => {
                 }
             })
 })
-app.get('/mapGenero', (req, res) => {
+app.get('/mapGenero', (req, res) =>{
     connection.query('select INSTITUCION.INST_NOMBRE as nombre, INCIDENCIAS.INC_VIC_GENERO as genero, count(INCIDENCIAS.INC_VIC_GENERO) as casos from INCIDENCIAS '+
 	'inner JOIN INSTITUCION ON INCIDENCIAS.INC_INST = INSTITUCION.ID_INST '+
 	'group by INSTITUCION.INST_NOMBRE',(error, result) =>{
@@ -290,6 +306,30 @@ app.get('/mapMunicipios', (req, res) => {
     connection.query('select MUNICIPIOS.MUNICIPIO_NOMBRE as municipio, count(MUNICIPIOS.MUNICIPIO_NOMBRE) as casos from MUNICIPIOS '+
 	'inner JOIN INCIDENCIAS ON MUNICIPIOS.ID_MUNICIPIO = INC_MUN '+
 	'group by MUNICIPIOS.MUNICIPIO_NOMBRE',(error, result) =>{
+                if(error){
+                    throw error
+                }else{
+                    res.json(result);
+                    //res.render('map', {result,result})
+                }
+            })
+})
+app.get('/mapInst', (req, res) => {
+    connection.query('select INSTITUCION.INST_NOMBRE as nombre, count(INSTITUCION.INST_NOMBRE) as casos from INCIDENCIAS '+
+	'inner JOIN INSTITUCION ON INCIDENCIAS.INC_INST = INSTITUCION.ID_INST '+
+	'group by INSTITUCION.INST_NOMBRE',(error, result) =>{
+                if(error){
+                    throw error
+                }else{
+                    res.json(result);
+                    //res.render('map', {result,result})
+                }
+            })
+})
+app.get('/mapNivel', (req, res) => {
+    connection.query('select INSTITUCION.INST_NOMBRE as nombre, INSTITUCION.INST_NIVEL AS nivel, count(INSTITUCION.INST_NOMBRE) as casos from INCIDENCIAS '+
+	'inner JOIN INSTITUCION ON INCIDENCIAS.INC_INST = INSTITUCION.ID_INST '+
+	'group by INSTITUCION.INST_NOMBRE;',(error, result) =>{
                 if(error){
                     throw error
                 }else{
