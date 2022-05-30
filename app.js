@@ -3,15 +3,17 @@ const express = require('express')
 const app = express()
 const port = 5000
 const mysql = require('mysql')
-const bcrypt = require('bcryptjs');
 const bodyParser = require('body-parser')
+
+const AES = require("crypto-js/aes");
+const CryptoJS = require("crypto-js");
+
 const {insertMunicipios,readMunicipios,insertarUsuario,
     readUsers,readUser,insertarIncidencias,readIncidencias,
     readviolencias,insertviolencias,
     readInstitucion,
     insertInstitucion
 } = require("./operations");
-const swal = require ('sweetalert2');
 require('dotenv').config()
 
 app.use(express.json());
@@ -74,24 +76,33 @@ app.post('/auth', urlencodedParser,(req, res)=> {
                     res.send("Contraseña incorrecta")
             }
          } )    */
-            
+
+         console.log(user,pass);
+    var bytes  = CryptoJS.AES.decrypt(pass, '');
+    var originalText = bytes.toString(CryptoJS.enc.Utf8);
+
+    console.log(originalText);
+    
 	if (user && pass) {
-		readUser(connection, 
+        readUser(connection, 
             {id:user},
-             (result) => {    
+            (result) => {    
                 if(!result[0]){
-                    res.send("Usuario no encontrado")
+                    res.send(JSON.stringify(-1))
                 } else{
-                    if(pass == result[0].USUARIO_PASSWORD)       
-                       res.send(result)               
+                    var bytes  = CryptoJS.AES.decrypt(result[0].USUARIO_PASSWORD, '');
+                    var passBD = bytes.toString(CryptoJS.enc.Utf8);
+                    console.log(passBD);
+                    if(originalText == passBD)       {
+                        res.send(result)               
+                    }
                     else
-                        res.send("Contraseña incorrecta")
+                        res.send(JSON.stringify(0))
                 }
              }
         )
 	} else {
 		res.send('Please enter user and Password!');
-		res.end();
 	}
 });
 
@@ -162,7 +173,7 @@ app.post('/insertIncidencia',  urlencodedParser, (req, res) => {
     const inc_esp = req.body.INC_ESP;
     const inc_fecha = req.body.INC_FECHA;
     const inc_hora = req.body.INC_HORA;
-    const id_violencia = parseInt(req.body.violencias_ID_VIOLENCIA);
+    const id_violencia = parseInt(req.body.violencias_ID_VIOLENCIA) + 1;
     const inc_vio_descr = req.body.INC_VIO_DESCR;
     const inc_vic_edad = req.body.INC_VIC_EDAD;
     const inc_vic_genero = req.body.INC_VIC_GENERO;
@@ -248,7 +259,8 @@ app.get('/readInstitucionBy/:nivel&:municipio', (req, res) => {
     console.log(nivel,municipio);
     connection.query('select * from INSTITUCION '+
     'where INST_NIVEL = \''+nivel+'\' and MUNICIPIOS_ID_MUNICIPIO = '+
-	'(Select ID_MUNICIPIO from MUNICIPIOS where ID_MUNICIPIO = '+municipio+');',(error, result) =>{
+	'(Select ID_MUNICIPIO from MUNICIPIOS where ID_MUNICIPIO = '+municipio+') '+
+    'order by INST_NOMBRE;',(error, result) =>{
                 if(error){
                     throw error
                 }else{
@@ -258,7 +270,7 @@ app.get('/readInstitucionBy/:nivel&:municipio', (req, res) => {
             })
 })
 /** Inserta violencias */
-app.post('/insertViolencias',urlencodedParser, (req, res) => {
+app.post('/insertViolencias',urlencodedParser,(req, res) => {
     console.log("Hola"); 
     const tipo = req.body.tipo
     insertviolencias(connection, 
@@ -281,7 +293,7 @@ app.get('/readViolencias', (req, res) => {
 app.get('/mapLugar', (req, res) => {
     connection.query('select INSTITUCION.INST_NOMBRE as nombre, INCIDENCIAS.INC_ESP as lugar, count(INCIDENCIAS.INC_ESP) as casos from INCIDENCIAS '+
 	'inner JOIN INSTITUCION ON INCIDENCIAS.INC_INST = INSTITUCION.ID_INST '+
-	'group by INCIDENCIAS.INC_ESP',(error, result) =>{
+	'group by INCIDENCIAS.INC_ESP order by INSTITUCION.INST_NOMBRE,casos desc',(error, result) =>{
                 if(error){
                     throw error
                 }else{
@@ -317,7 +329,7 @@ app.get('/mapMunicipios', (req, res) => {
 app.get('/mapInst', (req, res) => {
     connection.query('select INSTITUCION.INST_NOMBRE as nombre, count(INSTITUCION.INST_NOMBRE) as casos from INCIDENCIAS '+
 	'inner JOIN INSTITUCION ON INCIDENCIAS.INC_INST = INSTITUCION.ID_INST '+
-	'group by INSTITUCION.INST_NOMBRE',(error, result) =>{
+	'group by INSTITUCION.INST_NOMBRE order by casos desc',(error, result) =>{
                 if(error){
                     throw error
                 }else{
@@ -327,9 +339,23 @@ app.get('/mapInst', (req, res) => {
             })
 })
 app.get('/mapNivel', (req, res) => {
-    connection.query('select INSTITUCION.INST_NOMBRE as nombre, INSTITUCION.INST_NIVEL AS nivel, count(INSTITUCION.INST_NOMBRE) as casos from INCIDENCIAS '+
+    connection.query('select INSTITUCION.INST_NIVEL AS nivel, count(INSTITUCION.INST_NOMBRE) as casos from INCIDENCIAS '+
 	'inner JOIN INSTITUCION ON INCIDENCIAS.INC_INST = INSTITUCION.ID_INST '+
-	'group by INSTITUCION.INST_NOMBRE;',(error, result) =>{
+	'group by INSTITUCION.INST_NIVEL;',(error, result) =>{
+                if(error){
+                    throw error
+                }else{
+                    res.json(result);
+                    //res.render('map', {result,result})
+                }
+            })
+})
+app.get('/mapViolencia', (req, res) => {
+    connection.query('select INSTITUCION.INST_NOMBRE as nombre, (VIOLENCIAS.VIOLENCIA_TIPO) as tipo, '+
+    'count(VIOLENCIAS.VIOLENCIA_TIPO) as casos from INCIDENCIAS inner JOIN INSTITUCION ON INCIDENCIAS.INC_INST = INSTITUCION.ID_INST '+
+    'inner join VIOLENCIAS on INCIDENCIAS.VIOLENCIAS_ID_VIOLENCIA = VIOLENCIAS.ID_VIOLENCIA '+
+    'group by INCIDENCIAS.violencias_ID_VIOLENCIA, INSTITUCION.INST_NOMBRE '+
+    'ORDER BY INSTITUCION.INST_NOMBRE;',(error, result) =>{
                 if(error){
                     throw error
                 }else{
